@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <math.h>
-#include <mpi.h>
+#include <mpi.h>        
 
 // defines
 #define ROOT 0
@@ -115,6 +115,7 @@ void greedy_shortest_first_heuristic(int *x, int *y)
 void init_tsp()
 {
     int i, st;
+    int *x, *y;
 
     min_distance = INT_MAX;
 
@@ -125,9 +126,9 @@ void init_tsp()
             exit(1);
     }
 
-    printf("process[%d]: debug 1\n", rank);
+
+    /* everyone calls bcast, data is taken from root and ends up in everyone's nb_towns */
     MPI_Bcast(&nb_towns, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
-    printf("process[%d]: debug 2\n", rank);
 
     // Aloca espaço para a matriz de distâncias e o vetor de distâncias da cidade inicial
     d_matrix = (d_info **)malloc(sizeof(d_info *) * nb_towns);
@@ -135,15 +136,12 @@ void init_tsp()
         d_matrix[i] = (d_info *)malloc(sizeof(d_info) * nb_towns);
     dist_to_origin = (int *)malloc(sizeof(int) * nb_towns);
 
-    int *x = NULL;
-    int *y = NULL;
+    // Lê as coordenadas das cidades
+    x = (int *)malloc(sizeof(int) * nb_towns);
+    y = (int *)malloc(sizeof(int) * nb_towns);
 
     if (rank == ROOT)
     {
-
-        x = (int *)malloc(sizeof(int) * nb_towns);
-        y = (int *)malloc(sizeof(int) * nb_towns);
-
         for (i = 0; i < nb_towns; i++)
         {
             st = scanf("%u %u", x + i, y + i);
@@ -159,15 +157,12 @@ void init_tsp()
     // Aplica a heurística do vizinho mais próximo para inicializar a matriz de distâncias
     greedy_shortest_first_heuristic(x, y);
 
-    if (rank == ROOT)
-    {
-        free(x);
-        free(y);
-    }
+    free(x);
+    free(y);
 }
 
 // Executa o problema TSP e retorna a menor distância encontrada
-int run_tsp()
+void run_tsp()
 {
     int i, *path;
 
@@ -177,7 +172,7 @@ int run_tsp()
     path = (int *)malloc(sizeof(int) * nb_towns);
     path[0] = 0;
 
-    for (i = rank; i < nb_towns; i += size)
+    for (i = rank+1; i < nb_towns; i += size)
     {
         path[1] = i; // Cada processo começa de uma cidade diferente
         // Executa o algoritmo TSP
@@ -199,6 +194,8 @@ int run_tsp()
                 min_distance = result_buffer[i];
             }
         }
+        // Imprime a menor distância encontrada
+        printf("%d\n", min_distance);
     }
 
     // Libera a memória alocada
@@ -208,8 +205,6 @@ int run_tsp()
         free(d_matrix[i]);
     free(d_matrix);
 
-    // Retorna a menor distância encontrada
-    return min_distance;
 }
 
 int main(int argc, char **argv)
@@ -230,16 +225,16 @@ int main(int argc, char **argv)
             exit(1);
     }
 
-    printf("process[%d]: Before Bcast, num_instances is %d\n", rank, num_instances);
+    // printf("process[%d]: Before Bcast, num_instances is %d\n", rank, num_instances);
 
     /* everyone calls bcast, data is taken from root and ends up in everyone's num_instances */
     MPI_Bcast(&num_instances, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
-    printf("process[%d]: After Bcast, num_instances is %d\n", rank, num_instances);
+    // printf("process[%d]: After Bcast, num_instances is %d\n", rank, num_instances);
 
     // Executa o problema TSP para o número de instâncias fornecido
     while (num_instances-- > 0)
-        printf("%d\n", run_tsp());
+        run_tsp();
 
     MPI_Finalize();
     // nenhuma chamada a funções MPI depois deste ponto

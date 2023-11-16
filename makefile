@@ -1,6 +1,6 @@
 FLAGS=-O3 -lm
 CC=mpicc
-NUM_PROCESSOS=2
+NUM_PROCESSOS=6
 
 nomePrograma=par
 
