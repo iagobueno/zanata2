@@ -1,0 +1,8 @@
+Tempo Puramente Sequencial
+
+n  | resultado | tempo 
+13 | 0.000021s | 708
+14 | 0.000023s | 731
+15 | 0.000026s | 745
+16 | 0.000025s | 768
+17 | 0.000031s | 768

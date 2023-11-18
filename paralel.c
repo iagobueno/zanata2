@@ -230,7 +230,7 @@ int main(int argc, char **argv)
     /* everyone calls bcast, data is taken from root and ends up in everyone's num_instances */
     MPI_Bcast(&num_instances, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
-    // printf("process[%d]: After Bcast, num_instances is %d\n", rank, num_instances);
+    // printf("process[%d]: After Bcast, num_instances is %d\n", rank, num_instances);  
 
     // Executa o problema TSP para o número de instâncias fornecido
     while (num_instances-- > 0)

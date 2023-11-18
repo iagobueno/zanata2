@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <math.h>
+#include <sys/time.h>
+#include <time.h>
 
 // Estrutura para armazenar informações sobre distâncias entre cidades
 typedef struct
@@ -18,6 +20,8 @@ typedef struct
 
 int min_distance; // Armazena a menor distância encontrada
 int nb_towns;     // Número total de cidades
+struct timeval start_time, end_time; // structs de tempo
+double elapsed_time;
 
 d_info **d_matrix;   // Matriz de distâncias entre as cidades
 int *dist_to_origin; // Distâncias da cidade inicial para as demais
@@ -148,13 +152,23 @@ int run_tsp()
     int i, *path;
 
     init_tsp();
+    // obtém o tempo logo após entrar na parte paralela
 
     // Aloca espaço para o caminho
     path = (int *)malloc(sizeof(int) * nb_towns);
     path[0] = 0;
 
+    // obtém o tempo logo antes de entrar na parte paralela
+    gettimeofday(&end_time, NULL);
+
+    // Calcular o tempo decorrido em segundos
+    elapsed_time = (end_time.tv_sec - start_time.tv_sec) +
+                   (end_time.tv_usec - start_time.tv_usec) / 1e6;
+
     // Executa o algoritmo TSP
     tsp(1, 0, path);
+
+    gettimeofday(&start_time, NULL);
 
     // Libera a memória alocada
     free(path);
@@ -168,14 +182,28 @@ int run_tsp()
 
 int main(int argc, char **argv)
 {
+    // Obter o tempo inicial
+    gettimeofday(&start_time, NULL);
+
     int num_instances, st;
     st = scanf("%u", &num_instances);
     if (st != 1)
         exit(1);
 
+    int mdistfinal;
+
     // Executa o problema TSP para o número de instâncias fornecido
     while (num_instances-- > 0)
-        printf("%d\n", run_tsp());
+        mdistfinal = run_tsp();
+
+    // Obter o tempo final
+    gettimeofday(&end_time, NULL);
+
+    // Calcular o tempo decorrido em segundos
+    elapsed_time += (end_time.tv_sec - start_time.tv_sec) +
+                   (end_time.tv_usec - start_time.tv_usec) / 1e6;
+
+    printf("%d | %fs | %d\n", nb_towns, elapsed_time, mdistfinal);
 
     return 0;
 }
