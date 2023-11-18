@@ -9,6 +9,8 @@
 #include <limits.h>
 #include <math.h>
 #include <mpi.h>        
+#include <sys/time.h>
+#include <time.h>
 
 // defines
 #define ROOT 0
@@ -23,6 +25,9 @@ typedef struct
 int min_distance; // Armazena a menor distância encontrada
 int nb_towns;     // Número total de cidades
 int rank, size;   // variáveis MPI
+
+struct timeval start_time, end_time, mid_start_time; // structs de tempo
+double pure_sequencial_time, total_time; // variaveis de tempo
 
 d_info **d_matrix;   // Matriz de distâncias entre as cidades
 int *dist_to_origin; // Distâncias da cidade inicial para as demais
@@ -172,11 +177,24 @@ void run_tsp()
     path = (int *)malloc(sizeof(int) * nb_towns);
     path[0] = 0;
 
+    if(rank == ROOT){
+        // obtém o tempo logo antes de entrar na parte paralela
+        gettimeofday(&end_time, NULL);
+
+        // Calcular o tempo decorrido em segundos
+        pure_sequencial_time = (end_time.tv_sec - start_time.tv_sec) +
+                   (end_time.tv_usec - start_time.tv_usec) / 1e6;
+    }
+
     for (i = rank+1; i < nb_towns; i += size)
     {
         path[1] = i; // Cada processo começa de uma cidade diferente
         // Executa o algoritmo TSP
         tsp(2, dist_to_origin[i], path);
+    }
+
+    if(rank == ROOT){
+        gettimeofday(&mid_start_time, NULL);
     }
 
     // Coleta os resultados de cada processo
@@ -210,6 +228,10 @@ void run_tsp()
 int main(int argc, char **argv)
 {
 
+    if(rank == ROOT){
+    // Obter o tempo inicial
+    gettimeofday(&start_time, NULL);
+    }
     // nenhuma chamada a funções MPI antes deste ponto
     MPI_Init(&argc, &argv);
 
@@ -238,6 +260,20 @@ int main(int argc, char **argv)
 
     MPI_Finalize();
     // nenhuma chamada a funções MPI depois deste ponto
+
+    if(rank == ROOT){
+    // Obter o tempo final
+    gettimeofday(&end_time, NULL);
+
+    pure_sequencial_time += (end_time.tv_sec - mid_start_time.tv_sec) +
+                   (end_time.tv_usec - mid_start_time.tv_usec) / 1e6;
+
+    // Calcular o tempo decorrido em segundos
+    total_time = (end_time.tv_sec - start_time.tv_sec) +
+                   (end_time.tv_usec - start_time.tv_usec) / 1e6;
+
+    printf("%d | %fs | %fs |%d\n", nb_towns, pure_sequencial_time, total_time, min_distance );
+    }
 
     return 0;
 }

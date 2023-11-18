@@ -9,7 +9,7 @@ fi
 
 echo "Tempo Puramente Sequencial" >> ${OUTPUT} 
 echo "" >> ${OUTPUT}
-echo "n  | resultado | tempo " >> ${OUTPUT} 
+echo "n  | tempo      | resultado " >> ${OUTPUT} 
 
 for i in {13..17}; do
 
