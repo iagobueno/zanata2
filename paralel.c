@@ -193,10 +193,6 @@ void run_tsp()
         tsp(2, dist_to_origin[i], path);
     }
 
-    if(rank == ROOT){
-        gettimeofday(&mid_start_time, NULL);
-    }
-
     // Coleta os resultados de cada processo
     int *result_buffer = (int *)malloc(sizeof(int) * size);
     MPI_Gather(&min_distance, 1, MPI_INT, result_buffer, 1, MPI_INT, 0, MPI_COMM_WORLD);
@@ -213,7 +209,11 @@ void run_tsp()
             }
         }
         // Imprime a menor distância encontrada
-        printf("%d\n", min_distance);
+        // printf("%d\n", min_distance);
+    }
+
+    if(rank == ROOT){
+        gettimeofday(&mid_start_time, NULL);
     }
 
     // Libera a memória alocada
@@ -229,8 +229,8 @@ int main(int argc, char **argv)
 {
 
     if(rank == ROOT){
-    // Obter o tempo inicial
-    gettimeofday(&start_time, NULL);
+        // Obter o tempo inicial
+        gettimeofday(&start_time, NULL);
     }
     // nenhuma chamada a funções MPI antes deste ponto
     MPI_Init(&argc, &argv);
@@ -262,17 +262,17 @@ int main(int argc, char **argv)
     // nenhuma chamada a funções MPI depois deste ponto
 
     if(rank == ROOT){
-    // Obter o tempo final
-    gettimeofday(&end_time, NULL);
+        // Obter o tempo final
+        gettimeofday(&end_time, NULL);
 
-    pure_sequencial_time += (end_time.tv_sec - mid_start_time.tv_sec) +
-                   (end_time.tv_usec - mid_start_time.tv_usec) / 1e6;
+        pure_sequencial_time += (end_time.tv_sec - mid_start_time.tv_sec) +
+                    (end_time.tv_usec - mid_start_time.tv_usec) / 1e6;
 
-    // Calcular o tempo decorrido em segundos
-    total_time = (end_time.tv_sec - start_time.tv_sec) +
-                   (end_time.tv_usec - start_time.tv_usec) / 1e6;
+        // Calcular o tempo decorrido em segundos
+        total_time = (end_time.tv_sec - start_time.tv_sec) +
+                    (end_time.tv_usec - start_time.tv_usec) / 1e6;
 
-    printf("%d | %fs | %fs |%d\n", nb_towns, pure_sequencial_time, total_time, min_distance );
+        printf("%d | %fs | %fs |%d\n", nb_towns, pure_sequencial_time, total_time, min_distance );
     }
 
     return 0;

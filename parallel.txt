@@ -1,0 +1,9 @@
+Tempo Paralelo
+
+n  | tempo p s | tempo paralelo | resultado 
+PROCESSOS: 1
+13 | 0.238907s | 1.604376s |708
+14 | 0.238075s | 7.998501s |731
+PROCESSOS: 2
+13 | 0.257591s | 1.303481s |708
+14 | 0.246414s | 7.373053s |731
