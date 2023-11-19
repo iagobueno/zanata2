@@ -11,9 +11,10 @@ echo "Tempo Paralelo" >> ${OUTPUT}
 echo "" >> ${OUTPUT}
 echo "n  | tempo p s | tempo paralelo | resultado " >> ${OUTPUT} 
 
-for j in 1 2; do
+for j in 1 2 4 8; do
     echo "PROCESSOS: $j" >> ${OUTPUT}
-    for i in {13..14}; do
+    echo "RODANDO PRA $j"
+    for i in {13..17}; do
         sed -i "2s/.*/$i/" "${INPUT}"
         mpirun -np $j ./par < input-edited >> ${OUTPUT}
     done
