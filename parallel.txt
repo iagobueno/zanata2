@@ -1,25 +1,68 @@
-Tempo Paralelo
+NUM DE PROCESSOS = 1
+INSTANCIA = 13
+Average: 1.69122
+Standard Deviation: 0.0144535
 
-n  | tempo p s | tempo paralelo | resultado 
-PROCESSO(S): 1
-INSTANCIA 10
-Numeric Values: 0.265706 0.263633
-Average: 0.26467
-Standard Deviation: 0.0010365
+INSTANCIA = 14
+Average: 4.98043
+Standard Deviation: 3.28927
 
-INSTANCIA 11
-Numeric Values: 0.265706 0.263633 0.267187 0.270566
-Average: 0.266773
-Standard Deviation: 0.00252766
+INSTANCIA = 15
+Average: 13.9142
+Standard Deviation: 12.9169
 
-PROCESSO(S): 2
-INSTANCIA 10
-Numeric Values: 0.265706 0.263633 0.267187 0.270566 0.272878 0.273305
-Average: 0.26888
-Standard Deviation: 0.0036258
+INSTANCIA = 16
+Average: 44.5637
+Standard Deviation: 54.2525
 
-INSTANCIA 11
-Numeric Values: 0.265706 0.263633 0.267187 0.270566 0.272878 0.273305 0.266266 0.271109
-Average: 0.268832
-Standard Deviation: 0.0033664
+NUM DE PROCESSOS = 2
+INSTANCIA = 13
+Average: 35.935
+Standard Deviation: 51.5023
+
+INSTANCIA = 14
+Average: 31.2934
+Standard Deviation: 48.1467
+
+INSTANCIA = 15
+Average: 31.3475
+Standard Deviation: 44.5767
+
+INSTANCIA = 16
+Average: 44.3489
+Standard Deviation: 54.0595
+
+NUM DE PROCESSOS = 4
+INSTANCIA = 13
+Average: 39.5542
+Standard Deviation: 52.741
+
+INSTANCIA = 14
+Average: 36.4228
+Standard Deviation: 50.9087
+
+INSTANCIA = 15
+Average: 35.8794
+Standard Deviation: 48.57
+
+INSTANCIA = 16
+Average: 44.6292
+Standard Deviation: 54.8142
+
+NUM DE PROCESSOS = 6
+INSTANCIA = 13
+Average: 41.2681
+Standard Deviation: 53.9357
+
+INSTANCIA = 14
+Average: 38.7068
+Standard Deviation: 52.7877
+
+INSTANCIA = 15
+Average: 37.4547
+Standard Deviation: 51.2126
+
+INSTANCIA = 16
+Average: 41.5141
+Standard Deviation: 52.0192
 

@@ -9,23 +9,19 @@ fi
 
 N=5
 
-echo "Tempo Paralelo" >> ${OUTPUT} 
-echo "" >> ${OUTPUT}
-echo "n  | tempo p s | tempo paralelo | resultado " >> ${OUTPUT} 
-
-for j in 1 2; do
-    echo "PROCESSO(S): $j" >> ${OUTPUT}
-    for i in {10..11}; do
+for j in 1 2 4 6; do
+    echo "NUM DE PROCESSOS = $j" >> ${OUTPUT}
+    for i in {13..16}; do
     
         sed -i "2s/.*/$i/" "${INPUT}"
-        echo "INSTANCIA $i" >> ${OUTPUT}
+        echo "INSTANCIA = $i" >> ${OUTPUT}
 
         for seq in {1..2}; do
             echo "RODANDO PRA $j PROCESSO(S), INSTANCIA $i, VEZ $seq"
 
             TEMP=$(mpirun -np $j ./par < input-edited)
 
-            TIME=$(echo "$TEMP" | awk '{print $3}')
+            TIME=$(echo "$TEMP" | cut -d'|' -f3)
             numeric_value=$(echo "$TIME" | awk '{gsub(/[^0-9.]/,""); print}')
 
             # Append the values to the arrays
@@ -57,7 +53,6 @@ for j in 1 2; do
         # Calculate the standard deviation
         std_deviation=$(awk "BEGIN {print sqrt($sum_squared_diff / $count)}")
 
-        echo "Numeric Values: ${numeric_values[@]}" >> ${OUTPUT}
         echo "Average: $average" >> ${OUTPUT}
         echo "Standard Deviation: $std_deviation" >> ${OUTPUT}
         echo >> ${OUTPUT}
