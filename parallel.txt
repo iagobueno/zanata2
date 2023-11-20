@@ -1,9 +1,25 @@
 Tempo Paralelo
 
 n  | tempo p s | tempo paralelo | resultado 
-PROCESSOS: 1
-13 | 0.237774s | 1.564527s |708
-14 | 0.238909s | 7.851687s |731
-PROCESSOS: 2
-PROCESSOS: 4
-PROCESSOS: 8
+PROCESSO(S): 1
+INSTANCIA 10
+Numeric Values: 0.265706 0.263633
+Average: 0.26467
+Standard Deviation: 0.0010365
+
+INSTANCIA 11
+Numeric Values: 0.265706 0.263633 0.267187 0.270566
+Average: 0.266773
+Standard Deviation: 0.00252766
+
+PROCESSO(S): 2
+INSTANCIA 10
+Numeric Values: 0.265706 0.263633 0.267187 0.270566 0.272878 0.273305
+Average: 0.26888
+Standard Deviation: 0.0036258
+
+INSTANCIA 11
+Numeric Values: 0.265706 0.263633 0.267187 0.270566 0.272878 0.273305 0.266266 0.271109
+Average: 0.268832
+Standard Deviation: 0.0033664
+
